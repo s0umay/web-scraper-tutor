@@ -14,10 +14,24 @@ def safe_text(s: str) -> str:
 
 def transform_issue(issue: Dict[str, Any]) -> Dict[str, Any]:
     fields = issue.get("fields", {})
+
+    # Comments
     comments_raw = fields.get("comment", {}).get("comments", [])
-    comments = [{"author": c.get("author", {}).get("displayName"),
-                 "created": c.get("created"),
-                 "body": safe_text(c.get("body"))} for c in comments_raw]
+    comments = [
+        {
+            "author": c.get("author", {}).get("displayName"),
+            "created": c.get("created"),
+            "body": safe_text(c.get("body"))
+        }
+        for c in comments_raw
+    ]
+
+    # Derived placeholder for LLM
+    derived = {
+        "summary": None,
+        "labels": [],
+        "qa_pairs": []
+    }
 
     return {
         "issue_key": issue.get("key"),
@@ -26,11 +40,13 @@ def transform_issue(issue: Dict[str, Any]) -> Dict[str, Any]:
         "description": safe_text(fields.get("description")),
         "status": (fields.get("status") or {}).get("name"),
         "priority": (fields.get("priority") or {}).get("name"),
+        "reporter": (fields.get("reporter") or {}).get("displayName"),
+        "assignee": (fields.get("assignee") or {}).get("displayName"),
         "labels": fields.get("labels", []),
         "created": fields.get("created"),
         "updated": fields.get("updated"),
         "comments": comments,
-        "derived": {"summary": None, "qa_pairs": []},
+        "derived": derived,
         "raw_fields": fields
     }
 
