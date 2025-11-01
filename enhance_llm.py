@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import List, Dict
 
 DATA_DIR = Path("data/processed")  # where transform.py outputs JSONL
-OUTPUT_FILE = DATA_DIR / "jira_dataset.jsonl"
+OUTPUT_FILE = DATA_DIR / "jira_dataset_enhanced.jsonl"
 
 class DummyLLMClient:
     def summarize(self, text: str) -> str:
