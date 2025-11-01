@@ -1,0 +1,10 @@
+projects:
+  - CAMEL
+  - ZOOKEEPER
+  - HIVE
+page_size: 50
+outdir: ./data/raw
+max_results: 200
+rate_limit:
+  min_sleep_seconds: 0.5
+  max_retries: 5
